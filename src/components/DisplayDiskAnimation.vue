@@ -78,7 +78,6 @@ function render() {
     t -= 2 * Math.PI * props.params.numLobes
   }
   t += (5 * (performance.now() - bt)) / 1000.0
-
   bt = performance.now()
   requestAnimationFrame(render)
 }
@@ -93,16 +92,19 @@ function generateDiskPoints(phaseOffset) {
   let thetaStepSize = 0.001
 
   for (let theta = 0; theta <= 2 * Math.PI; theta += thetaStepSize) {
-    let angle = theta + phaseOffset / props.params.numLobes
+    let angle = theta
     let x =
-      (r1 + r2) * Math.cos(angle - phaseOffset / props.params.numLobes) -
+      (r1 + r2) * Math.cos(angle) -
       props.params.eccentricity * Math.cos((angle * (r1 + r2)) / r2)
     let y =
-      (r1 + r2) * Math.sin(angle - phaseOffset / props.params.numLobes) -
+      (r1 + r2) * Math.sin(angle) -
       props.params.eccentricity * Math.sin((angle * (r1 + r2)) / r2)
     let point = {}
-    point.x = x
-    point.y = y
+    let rotateAngle = -phaseOffset/props.params.numLobes
+    let cos = Math.cos(rotateAngle)
+    let sin = Math.sin(rotateAngle)
+    point.x = x * cos - y * sin
+    point.y = x * sin + y * cos
     points.push(point)
   }
   let minOffset = Number.MAX_VALUE

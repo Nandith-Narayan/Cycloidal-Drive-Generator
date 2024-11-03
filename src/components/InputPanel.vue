@@ -1,9 +1,9 @@
 <script setup>
 import { ref, watch } from 'vue'
 const emit = defineEmits(['updateParams'])
-const numLobes = ref(24) //24
+const numLobes = ref(10) //24
 const ringSize = ref(70) //70
-const eccentricity = ref(0.7)
+const eccentricity = ref(2)
 const bearingSize = ref(22.2)
 const pinSize = ref(3.5)
 const numOutputPins = ref(5)
