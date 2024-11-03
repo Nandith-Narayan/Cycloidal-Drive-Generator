@@ -1,0 +1,16 @@
+:root {
+  --bg-color-primary: #121212;
+  --bg-color-secondary: #3f3f3f;
+  --fg-color-primary: #ffffff;
+  --fg-color-secondary: #4f42ff;
+}
+
+body {
+  background: var(--bg-color-primary);
+  color: var(--fg-color-secondary);
+}
+
+#app {
+  margin: 0;
+  padding: 0;
+}
