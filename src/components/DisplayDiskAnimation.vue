@@ -144,9 +144,9 @@ function drawDisk(points, cx, cy, scaleFactor, phase, phaseOffset, color) {
   //ctx.moveTo();
   let cos = Math.cos(phase)
   let sin = Math.sin(phase)
-  for (let i = 0; i < points.length; i++) {
-    let px = points[i].x
-    let py = points[i].y
+  for (let i = 0; i < points.length+1; i++) {
+    let px = points[i%points.length].x
+    let py = points[i%points.length].y
 
     let x = px * cos - py * sin
     let y = px * sin + py * cos
@@ -261,14 +261,13 @@ function drawOutputPins(cx, cy, scaleFactor, outputPhase) {
 onMounted(() => {
   let c = document.getElementById('disk-animation')
   ctx = c.getContext('2d')
-  console.log('AMONGUS')
   requestAnimationFrame(render)
 })
 </script>
 
 <template>
   <div id="disk-animation-div" class="card">
-    <canvas id="disk-animation" width="500" height="500"></canvas>
+    <canvas id="disk-animation" width="500" height="500"></canvas><br />
     Render Resolution: {{numPointsToRender}} Points<br />
     <input v-model.number="numPointsToRender" type="range" min="100" max="10000" value="1000" step="10"/>
   </div>

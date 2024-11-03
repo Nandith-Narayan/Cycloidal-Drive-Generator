@@ -117,9 +117,9 @@ function render() {
     ctx.setLineDash([])
     ctx.strokeStyle = 'darkgreen'
     //ctx.moveTo();
-    for (let i = 1; i < points.length; i++) {
-      let p1 = points[i - 1]
-      let p2 = points[i]
+    for (let i = 1; i < points.length+2; i++) {
+      let p1 = points[(i - 1)%points.length]
+      let p2 = points[i%points.length]
       let dx = p2.x - p1.x
       let dy = p2.y - p1.y
       let len = Math.sqrt(dx * dx + dy * dy)
@@ -210,7 +210,7 @@ onMounted(() => {
 
 <template>
   <div id="disk-creation-div" class="card">
-    <canvas id="disk-creation" width="500" height="500"></canvas>
+    <canvas id="disk-creation" width="500" height="500"></canvas><br />
     Render Resolution: {{numPointsToRender}} Points<br />
     <input v-model.number="numPointsToRender" type="range" min="100" max="10000" value="1000" step="10"/>
   </div>

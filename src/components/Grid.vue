@@ -21,9 +21,13 @@ function updateParams(p) {
 #grid {
   display: flex;
   flex-direction: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100vw;
   gap: 0.5em;
   background-color: var(--bg-color-primary);
   text-color: var(--fg-color-primary);
+
 }
 
 .card {
