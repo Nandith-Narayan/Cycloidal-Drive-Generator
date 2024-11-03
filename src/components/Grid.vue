@@ -33,5 +33,7 @@ function updateParams(p) {
 .card {
   background-color: var(--bg-color-secondary);
   border-radius: 0.5em;
+  max-width: 90vw;
+  height: auto;
 }
 </style>

@@ -110,7 +110,7 @@ li {
 input {
   padding: 0;
   margin: 0;
-  width: 15em;
+  width: 99%;
   border-width: 1px;
   border-style: solid;
   color: var(--fg-color-secondary);

@@ -276,10 +276,17 @@ onMounted(() => {
 <style scoped>
 div#disk-animation-div {
   color: var(--fg-color-primary);
+  padding: 0.5em;
+}
+
+input{
+  width: 100%;
+  padding: 0;
+  margin: 0;
 }
 
 canvas#disk-animation {
-  width: 500px;
-  height: 500px;
+  max-width: 100%;
+  height: auto;
 }
 </style>
