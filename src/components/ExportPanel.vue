@@ -21,7 +21,12 @@ d.addLayer('l_yellow', Drawing.ACI.YELLOW, 'DOTTED')
 console.log(d.toDxfString())
 
 function generateDisks() {
-  generateDiskPoints(0)
+  let numDisks = props.params.numDisks
+    for (let i = 0; i < numDisks; i++) {
+      let phaseOffset = (i * 2 * Math.PI) / numDisks
+      generateDiskPoints(phaseOffset)
+    }
+
 }
 
 function generateDiskPoints(phaseOffset) {
