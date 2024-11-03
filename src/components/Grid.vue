@@ -25,7 +25,7 @@ function updateParams(p) {
   flex-direction: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 100vw;
+  width: 100%;
   gap: 0.5em;
   background-color: var(--bg-color-primary);
   text-color: var(--fg-color-primary);
@@ -34,7 +34,7 @@ function updateParams(p) {
 .card {
   background-color: var(--bg-color-secondary);
   border-radius: 0.5em;
-  max-width: 90vw;
+  max-width: 90%;
   height: auto;
 }
 </style>

@@ -5,11 +5,14 @@
   --fg-color-secondary: #4f42ff;
 }
 
+html,
 body {
   background: var(--bg-color-primary);
   color: var(--fg-color-secondary);
   margin: 0;
   padding: 0;
+  border: 0;
+  overflow-x: hidden;
 }
 
 #app {

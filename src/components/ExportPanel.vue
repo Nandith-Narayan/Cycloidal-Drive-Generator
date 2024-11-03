@@ -20,9 +20,8 @@ d.addLayer('l_yellow', Drawing.ACI.YELLOW, 'DOTTED')
 
 console.log(d.toDxfString())
 
-function generateDisks(){
-generateDiskPoints(0);
-
+function generateDisks() {
+  generateDiskPoints(0)
 }
 
 function generateDiskPoints(phaseOffset) {
@@ -70,7 +69,6 @@ function generateDiskPoints(phaseOffset) {
 
   return diskPoints
 }
-
 </script>
 
 <template>
@@ -85,7 +83,9 @@ function generateDiskPoints(phaseOffset) {
       step="100"
     />
 
-    <button @click="generateDisks">Export Disk{{ props.params.numDisks > 1 ? 's' : '' }}</button>
+    <button @click="generateDisks">
+      Export Disk{{ props.params.numDisks > 1 ? 's' : '' }}
+    </button>
   </div>
 </template>
 
