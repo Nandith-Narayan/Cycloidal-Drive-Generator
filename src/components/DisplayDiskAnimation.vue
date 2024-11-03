@@ -10,12 +10,9 @@ let diskPoints = []
 
 const numPointsToRender = ref(1000)
 
-watch(numPointsToRender,
-  (newVals, oldVals) => {
-    props.params.hasChanged = true
-  },
-)
-
+watch(numPointsToRender, (newVals, oldVals) => {
+  props.params.hasChanged = true
+})
 
 function render() {
   ctx.clearRect(0, 0, 500, 500)
@@ -38,9 +35,8 @@ function render() {
 
     //console.log(t/(props.params.numLobes), diskPhase);
     if (props.params.hasChanged) {
-    diskPoints = []
+      diskPoints = []
     }
-
 
     let diskPhase = -t / props.params.numLobes
     drawOutputPins(cx, cy, scaleFactor, diskPhase)
@@ -64,7 +60,7 @@ function render() {
       )
     }
     if (props.params.hasChanged) {
-    props.params.hasChanged = false
+      props.params.hasChanged = false
     }
 
     // Draw dimention label
@@ -98,10 +94,10 @@ function generateDiskPoints(phaseOffset) {
   let r2 = r / (props.params.numLobes + 1)
   let r1 = r - r2
 
-  let thetaStepSize = 2*Math.PI/numPointsToRender.value
+  let thetaStepSize = (2 * Math.PI) / numPointsToRender.value
 
   for (let theta = 0; theta <= 2 * Math.PI; theta += thetaStepSize) {
-    let angle = theta + phaseOffset/props.params.numLobes
+    let angle = theta + phaseOffset / props.params.numLobes
     let x =
       (r1 + r2) * Math.cos(angle) -
       props.params.eccentricity * Math.cos((angle * (r1 + r2)) / r2)
@@ -109,7 +105,7 @@ function generateDiskPoints(phaseOffset) {
       (r1 + r2) * Math.sin(angle) -
       props.params.eccentricity * Math.sin((angle * (r1 + r2)) / r2)
     let point = {}
-    let rotateAngle = -phaseOffset/props.params.numLobes
+    let rotateAngle = -phaseOffset / props.params.numLobes
     let cos = Math.cos(rotateAngle)
     let sin = Math.sin(rotateAngle)
     point.x = x * cos - y * sin
@@ -144,9 +140,9 @@ function drawDisk(points, cx, cy, scaleFactor, phase, phaseOffset, color) {
   //ctx.moveTo();
   let cos = Math.cos(phase)
   let sin = Math.sin(phase)
-  for (let i = 0; i < points.length+1; i++) {
-    let px = points[i%points.length].x
-    let py = points[i%points.length].y
+  for (let i = 0; i < points.length + 1; i++) {
+    let px = points[i % points.length].x
+    let py = points[i % points.length].y
 
     let x = px * cos - py * sin
     let y = px * sin + py * cos
@@ -268,8 +264,15 @@ onMounted(() => {
 <template>
   <div id="disk-animation-div" class="card">
     <canvas id="disk-animation" width="500" height="500"></canvas><br />
-    Render Resolution: {{numPointsToRender}} Points<br />
-    <input v-model.number="numPointsToRender" type="range" min="100" max="10000" value="1000" step="10"/>
+    Render Resolution: {{ numPointsToRender }} Points<br />
+    <input
+      v-model.number="numPointsToRender"
+      type="range"
+      min="100"
+      max="10000"
+      value="1000"
+      step="10"
+    />
   </div>
 </template>
 
@@ -279,7 +282,7 @@ div#disk-animation-div {
   padding: 0.5em;
 }
 
-input{
+input {
   width: 100%;
   padding: 0;
   margin: 0;

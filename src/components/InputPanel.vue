@@ -23,7 +23,6 @@ params.outputPinSize = outputPinSize.value
 params.outputPinPosition = outputPinPosition.value
 params.numDisks = numDisks.value
 
-
 params.hasChanged = true
 
 watch(

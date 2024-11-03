@@ -7,7 +7,6 @@ let bt = performance.now()
 
 const numPointsToRender = ref(1000)
 
-
 function render() {
   ctx.clearRect(0, 0, 500, 500)
   try {
@@ -93,7 +92,7 @@ function render() {
     ctx.setLineDash([7, 2])
     ctx.strokeStyle = 'red'
     //ctx.moveTo();
-    let thetaStep = 2*Math.PI/numPointsToRender.value
+    let thetaStep = (2 * Math.PI) / numPointsToRender.value
     for (let theta = 0; theta <= 2 * Math.PI; theta += thetaStep) {
       let x =
         (r1 + r2) * Math.cos(theta) -
@@ -115,11 +114,11 @@ function render() {
     // Draw true spline
     ctx.beginPath()
     ctx.setLineDash([])
-    ctx.strokeStyle = 'darkgreen'
+    ctx.strokeStyle = 'lime'
     //ctx.moveTo();
-    for (let i = 1; i < points.length+2; i++) {
-      let p1 = points[(i - 1)%points.length]
-      let p2 = points[i%points.length]
+    for (let i = 1; i < points.length + 2; i++) {
+      let p1 = points[(i - 1) % points.length]
+      let p2 = points[i % points.length]
       let dx = p2.x - p1.x
       let dy = p2.y - p1.y
       let len = Math.sqrt(dx * dx + dy * dy)
@@ -144,7 +143,7 @@ function render() {
     ctx.stroke()
     ctx.closePath()
     ctx.beginPath()
-    ctx.strokeStyle = 'darkgreen'
+    ctx.strokeStyle = 'lime'
     ctx.arc(cx, cy, 2, 0, 2 * Math.PI)
     ctx.stroke()
     ctx.closePath()
@@ -156,7 +155,7 @@ function render() {
     ctx.closePath()
 
     // Draw output holes on disk
-    ctx.strokeStyle = 'darkgreen'
+    ctx.strokeStyle = 'lime'
     for (let i = 0; i < props.params.numOutputPins; i++) {
       ctx.beginPath()
       let x =
@@ -211,8 +210,15 @@ onMounted(() => {
 <template>
   <div id="disk-creation-div" class="card">
     <canvas id="disk-creation" width="500" height="500"></canvas><br />
-    Render Resolution: {{numPointsToRender}} Points<br />
-    <input v-model.number="numPointsToRender" type="range" min="100" max="10000" value="1000" step="10"/>
+    Render Resolution: {{ numPointsToRender }} Points<br />
+    <input
+      v-model.number="numPointsToRender"
+      type="range"
+      min="100"
+      max="10000"
+      value="1000"
+      step="10"
+    />
   </div>
 </template>
 
@@ -222,7 +228,7 @@ div#disk-creation-div {
   padding: 0.5em;
 }
 
-input{
+input {
   width: 100%;
   padding: 0;
   margin: 0;

@@ -27,7 +27,6 @@ function updateParams(p) {
   gap: 0.5em;
   background-color: var(--bg-color-primary);
   text-color: var(--fg-color-primary);
-
 }
 
 .card {

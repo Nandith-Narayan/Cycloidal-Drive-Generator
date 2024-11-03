@@ -5,16 +5,15 @@ import Header from './components/Header.vue'
 
 <template>
   <div id="main-container">
-  <Header />
-  <Grid />
+    <Header />
+    <Grid />
   </div>
 </template>
 
 <style>
-div#container{
+div#container {
   display: flex;
   flex-direction: column;
   justify-self: start;
 }
-
 </style>
