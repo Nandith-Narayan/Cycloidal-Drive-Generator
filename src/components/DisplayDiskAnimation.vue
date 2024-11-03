@@ -5,8 +5,18 @@ let ctx = {}
 let t = 0.0
 let bt = performance.now()
 
-let diskColors = ['darkblue', 'darkred', 'darkgreen']
+let diskColors = ['darkblue', 'darkred', 'darkgreen', 'darkmagenta', 'darkcyan']
 let diskPoints = []
+
+const numPointsToRender = ref(1000)
+
+watch(numPointsToRender,
+  (newVals, oldVals) => {
+    props.params.hasChanged = true
+  },
+)
+
+
 function render() {
   ctx.clearRect(0, 0, 500, 500)
   try {
@@ -34,7 +44,7 @@ function render() {
 
     let diskPhase = -t / props.params.numLobes
     drawOutputPins(cx, cy, scaleFactor, diskPhase)
-    let numDisks = 2
+    let numDisks = props.params.numDisks
     for (let i = 0; i < numDisks; i++) {
       let color = diskColors[i % diskColors.length]
       let phaseOffset = (i * 2 * Math.PI) / numDisks
@@ -88,7 +98,7 @@ function generateDiskPoints(phaseOffset) {
   let r2 = r / (props.params.numLobes + 1)
   let r1 = r - r2
 
-  let thetaStepSize = 0.001
+  let thetaStepSize = 2*Math.PI/numPointsToRender.value
 
   for (let theta = 0; theta <= 2 * Math.PI; theta += thetaStepSize) {
     let angle = theta + phaseOffset/props.params.numLobes
@@ -259,11 +269,14 @@ onMounted(() => {
 <template>
   <div id="disk-animation-div" class="card">
     <canvas id="disk-animation" width="500" height="500"></canvas>
+    Render Resolution: {{numPointsToRender}} Points<br />
+    <input v-model.number="numPointsToRender" type="range" min="100" max="10000" value="1000" step="10"/>
   </div>
 </template>
 
 <style scoped>
 div#disk-animation-div {
+  color: var(--fg-color-primary);
 }
 
 canvas#disk-animation {

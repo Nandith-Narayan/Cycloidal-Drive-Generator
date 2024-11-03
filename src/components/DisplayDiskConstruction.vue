@@ -5,6 +5,9 @@ let ctx = {}
 let t = 0.0
 let bt = performance.now()
 
+const numPointsToRender = ref(1000)
+
+
 function render() {
   ctx.clearRect(0, 0, 500, 500)
   try {
@@ -90,7 +93,8 @@ function render() {
     ctx.setLineDash([7, 2])
     ctx.strokeStyle = 'red'
     //ctx.moveTo();
-    for (let theta = 0; theta <= 2 * Math.PI; theta += 0.001) {
+    let thetaStep = 2*Math.PI/numPointsToRender.value
+    for (let theta = 0; theta <= 2 * Math.PI; theta += thetaStep) {
       let x =
         (r1 + r2) * Math.cos(theta) -
         props.params.eccentricity * Math.cos((theta * (r1 + r2)) / r2)
@@ -207,11 +211,14 @@ onMounted(() => {
 <template>
   <div id="disk-creation-div" class="card">
     <canvas id="disk-creation" width="500" height="500"></canvas>
+    Render Resolution: {{numPointsToRender}} Points<br />
+    <input v-model.number="numPointsToRender" type="range" min="100" max="10000" value="1000" step="10"/>
   </div>
 </template>
 
 <style scoped>
 div#disk-creation-div {
+  color: var(--fg-color-primary);
 }
 
 canvas#disk-creation {

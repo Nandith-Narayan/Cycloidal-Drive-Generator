@@ -9,6 +9,7 @@ const pinSize = ref(3.5)
 const numOutputPins = ref(5)
 const outputPinSize = ref(5)
 const outputPinPosition = ref(25)
+const numDisks = ref(2)
 
 const params = {}
 
@@ -20,6 +21,9 @@ params.pinSize = pinSize.value
 params.numOutputPins = numOutputPins.value
 params.outputPinSize = outputPinSize.value
 params.outputPinPosition = outputPinPosition.value
+params.numDisks = numDisks.value
+
+
 params.hasChanged = true
 
 watch(
@@ -32,6 +36,7 @@ watch(
     numOutputPins,
     outputPinSize,
     outputPinPosition,
+    numDisks,
   ],
   (newVals, oldVals) => {
     params.numLobes = Math.round(numLobes.value)
@@ -42,6 +47,8 @@ watch(
     params.numOutputPins = numOutputPins.value
     params.outputPinSize = outputPinSize.value
     params.outputPinPosition = outputPinPosition.value
+    params.numDisks = Math.round(numDisks.value)
+
     params.hasChanged = true
     emit('updateParams', params)
   },
@@ -83,6 +90,10 @@ emit('updateParams', params)
       <li>
         Output Pin Distance from Center: {{ params.outputPinPosition }} mm<br />
         <input v-model.number="outputPinPosition" />
+      </li>
+      <li>
+        Number of Disks: {{ params.numDisks }}<br />
+        <input v-model.number="numDisks" />
       </li>
     </ul>
   </div>
