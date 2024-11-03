@@ -92,7 +92,7 @@ function generateDiskPoints(phaseOffset) {
   let thetaStepSize = 0.001
 
   for (let theta = 0; theta <= 2 * Math.PI; theta += thetaStepSize) {
-    let angle = theta
+    let angle = theta + phaseOffset/props.params.numLobes
     let x =
       (r1 + r2) * Math.cos(angle) -
       props.params.eccentricity * Math.cos((angle * (r1 + r2)) / r2)
