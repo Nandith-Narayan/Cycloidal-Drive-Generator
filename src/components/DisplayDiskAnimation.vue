@@ -41,7 +41,6 @@ function render() {
       if (props.params.hasChanged) {
         diskPoints.push(generateDiskPoints(phaseOffset))
       }
-
       drawDisk(
         diskPoints[i],
         cx +
