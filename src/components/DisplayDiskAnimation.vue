@@ -112,8 +112,7 @@ function generateDiskPoints(phaseOffset) {
     point.y = x * sin + y * cos
     points.push(point)
   }
-  let minOffset = Number.MAX_VALUE
-  let maxOffset = -1
+
   for (let i = 1; i < points.length; i++) {
     let p1 = points[i - 1]
     let p2 = points[i]

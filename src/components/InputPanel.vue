@@ -46,7 +46,7 @@ watch(
     params.numOutputPins = numOutputPins.value
     params.outputPinSize = outputPinSize.value
     params.outputPinPosition = outputPinPosition.value
-    params.numDisks = Math.round(numDisks.value)
+    params.numDisks = Math.round(Math.max(numDisks.value, 1))
 
     params.hasChanged = true
     emit('updateParams', params)

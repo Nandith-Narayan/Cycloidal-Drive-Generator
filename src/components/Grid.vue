@@ -2,6 +2,7 @@
 import DisplayDiskConstruction from './DisplayDiskConstruction.vue'
 import DisplayDiskAnimation from './DisplayDiskAnimation.vue'
 import InputPanel from './InputPanel.vue'
+import ExportPanel from './ExportPanel.vue'
 import { ref } from 'vue'
 const params = ref({})
 function updateParams(p) {
@@ -14,6 +15,7 @@ function updateParams(p) {
     <InputPanel @updateParams="updateParams" />
     <DisplayDiskConstruction :params="params" />
     <DisplayDiskAnimation :params="params" />
+    <ExportPanel :params="params" />
   </div>
 </template>
 
