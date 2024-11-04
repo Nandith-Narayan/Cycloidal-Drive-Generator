@@ -21,15 +21,13 @@ d.addLayer('l_yellow', Drawing.ACI.YELLOW, 'DOTTED')
   .drawCircle(50, -30, 25)
 
 console.log(d.toDxfString())*/
-let files = []
-let urls = ref([])
+let files = ref([])
 
 function generateDisks() {
-  files = []
-  urls.value = []
+  files.value = []
 
   let numDisks = props.params.numDisks
-  allDiskPoints = [];
+  allDiskPoints = []
   for (let i = 0; i < numDisks; i++) {
     let phaseOffset = (i * 2 * Math.PI) / numDisks
     allDiskPoints.push(generateDiskPoints(phaseOffset))
@@ -41,20 +39,16 @@ function generateDisks() {
     drawing.addLayer('disk', Drawing.ACI.GREEN, 'CONTINUOUS')
     drawing.setActiveLayer('disk')
     let pointArr = []
-    for(let j=0;j<allDiskPoints[i].length;j++){
+    for (let j = 0; j < allDiskPoints[i].length; j++) {
       pointArr.push([allDiskPoints[i][j].x, allDiskPoints[i][j].y])
     }
     pointArr.push([allDiskPoints[i][0].x, allDiskPoints[i][0].y])
     drawing.drawPolyline(pointArr, true, 1, 1)
 
-    let file = new Blob([drawing.toDxfString()], {type: 'text/plain'})
+    let file = new Blob([drawing.toDxfString()], { type: 'text/plain' })
     let url = URL.createObjectURL(file)
-    files.push(file)
-    urls.value.push(url)
+    files.value.push({file: file, url: url, text: "Disk "+(i+1).toString(), filename: "Disk "+(i+1).toString()+".dxf"})
   }
-
-
-
 }
 
 function generateDiskPoints(phaseOffset) {
@@ -120,9 +114,9 @@ function generateDiskPoints(phaseOffset) {
       Export Disk{{ props.params.numDisks > 1 ? 's' : '' }}
     </button>
     <ul>
-    <li v-for="url in urls">
-  {{ url }}
-</li>
+      <li v-for="file in files">
+        <a :href="file.url" :download="file.filename">{{file.text}}</a>
+      </li>
     </ul>
   </div>
 </template>
