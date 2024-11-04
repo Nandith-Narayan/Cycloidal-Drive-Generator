@@ -172,7 +172,7 @@ input {
   width: 99%;
   border-width: 1px;
   border-style: solid;
-  color: #0090FF;
+  color: #0090ff;
   background: var(--bg-color-secondary);
 }
 img {

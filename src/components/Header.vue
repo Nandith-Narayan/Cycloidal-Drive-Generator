@@ -12,8 +12,8 @@
 </template>
 
 <style scoped>
-h1{
-color: #0090FF;
+h1 {
+  color: #0090ff;
 }
 div#header-container {
   color: var(--fg-color-secondary);

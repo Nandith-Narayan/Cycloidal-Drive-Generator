@@ -1,7 +1,9 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, useTemplateRef } from 'vue'
 import Drawing from 'dxf-writer'
 const props = defineProps(['params'])
+
+const downloadSection = useTemplateRef('bottomOfDownloadSection')
 
 const numPointsToExport = ref(1000)
 let diskColors = [
@@ -90,6 +92,9 @@ function generateDisks() {
     text: 'Entire Drive',
     filename: 'Cycloidal Drive.dxf',
   })
+  setTimeout(() => {
+    downloadSection.value.scrollIntoView({ behavior: 'smooth' })
+  }, 100)
 }
 
 function drawDiskOntoDXF(drawing, points) {
@@ -220,6 +225,7 @@ function generateDiskPoints(phaseOffset) {
         <a :href="file.url" :download="file.filename">{{ file.text }}</a>
       </li>
     </ul>
+    <div ref="bottomOfDownloadSection"></div>
   </div>
 </template>
 
