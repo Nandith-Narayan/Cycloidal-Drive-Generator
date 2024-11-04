@@ -3,9 +3,11 @@ import { ref } from 'vue'
 import Drawing from 'dxf-writer'
 const props = defineProps(['params'])
 
-const numPointsToExport = ref(10000)
+const numPointsToExport = ref(1000)
 
-let d = new Drawing()
+let allDiskPoints = []
+
+/*let d = new Drawing()
 
 d.setUnits('Millimeters')
 d.drawText(10, 0, 10, 0, 'Hello World') // draw text in the default layer named "0"
@@ -18,14 +20,40 @@ d.addLayer('l_yellow', Drawing.ACI.YELLOW, 'DOTTED')
   .setActiveLayer('l_yellow')
   .drawCircle(50, -30, 25)
 
-console.log(d.toDxfString())
+console.log(d.toDxfString())*/
+let files = []
+let urls = ref([])
 
 function generateDisks() {
+  files = []
+  urls.value = []
+
   let numDisks = props.params.numDisks
-    for (let i = 0; i < numDisks; i++) {
-      let phaseOffset = (i * 2 * Math.PI) / numDisks
-      generateDiskPoints(phaseOffset)
+  allDiskPoints = [];
+  for (let i = 0; i < numDisks; i++) {
+    let phaseOffset = (i * 2 * Math.PI) / numDisks
+    allDiskPoints.push(generateDiskPoints(phaseOffset))
+  }
+
+  for (let i = 0; i < numDisks; i++) {
+    let drawing = new Drawing()
+    drawing.setUnits('Millimeters')
+    drawing.addLayer('disk', Drawing.ACI.GREEN, 'CONTINUOUS')
+    drawing.setActiveLayer('disk')
+    let pointArr = []
+    for(let j=0;j<allDiskPoints[i].length;j++){
+      pointArr.push([allDiskPoints[i][j].x, allDiskPoints[i][j].y])
     }
+    pointArr.push([allDiskPoints[i][0].x, allDiskPoints[i][0].y])
+    drawing.drawPolyline(pointArr, true, 1, 1)
+
+    let file = new Blob([drawing.toDxfString()], {type: 'text/plain'})
+    let url = URL.createObjectURL(file)
+    files.push(file)
+    urls.value.push(url)
+  }
+
+
 
 }
 
@@ -82,8 +110,8 @@ function generateDiskPoints(phaseOffset) {
     <input
       v-model.number="numPointsToExport"
       type="range"
-      min="1000"
-      max="100000"
+      min="500"
+      max="10000"
       value="1000"
       step="100"
     />
@@ -91,6 +119,11 @@ function generateDiskPoints(phaseOffset) {
     <button @click="generateDisks">
       Export Disk{{ props.params.numDisks > 1 ? 's' : '' }}
     </button>
+    <ul>
+    <li v-for="url in urls">
+  {{ url }}
+</li>
+    </ul>
   </div>
 </template>
 
