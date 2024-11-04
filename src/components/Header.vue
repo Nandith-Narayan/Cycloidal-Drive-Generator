@@ -12,8 +12,11 @@
 </template>
 
 <style scoped>
+h1{
+color: #0090FF;
+}
 div#header-container {
-  color: var(--fg-color-primary);
+  color: var(--fg-color-secondary);
   margin: 1em;
 }
 </style>
