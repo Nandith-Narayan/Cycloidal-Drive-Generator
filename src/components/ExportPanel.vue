@@ -4,7 +4,13 @@ import Drawing from 'dxf-writer'
 const props = defineProps(['params'])
 
 const numPointsToExport = ref(1000)
-
+let diskColors = [
+  Drawing.ACI.BLUE,
+  Drawing.ACI.RED,
+  Drawing.ACI.GREEN,
+  Drawing.ACI.MAGENTA,
+  Drawing.ACI.CYAN,
+]
 let allDiskPoints = []
 
 /*let d = new Drawing()
@@ -33,21 +39,113 @@ function generateDisks() {
     allDiskPoints.push(generateDiskPoints(phaseOffset))
   }
 
+  let fullDrawing = new Drawing()
+  fullDrawing.setUnits('Millimeters')
+
   for (let i = 0; i < numDisks; i++) {
+    let phaseOffset = (i * 2 * Math.PI) / numDisks
+
+    let color = diskColors[i % diskColors.length]
+    fullDrawing.addLayer('disk_' + (i + 1).toString(), color, 'CONTINUOUS')
+    fullDrawing.setActiveLayer('disk_' + (i + 1).toString())
+    drawDiskOntoDXF(fullDrawing, allDiskPoints[i])
+    drawHolesOntoDXF(fullDrawing, phaseOffset)
+
     let drawing = new Drawing()
     drawing.setUnits('Millimeters')
     drawing.addLayer('disk', Drawing.ACI.GREEN, 'CONTINUOUS')
     drawing.setActiveLayer('disk')
-    let pointArr = []
-    for (let j = 0; j < allDiskPoints[i].length; j++) {
-      pointArr.push([allDiskPoints[i][j].x, allDiskPoints[i][j].y])
-    }
-    pointArr.push([allDiskPoints[i][0].x, allDiskPoints[i][0].y])
-    drawing.drawPolyline(pointArr, true, 1, 1)
+    drawDiskOntoDXF(drawing, allDiskPoints[i])
+    drawHolesOntoDXF(drawing, phaseOffset)
 
     let file = new Blob([drawing.toDxfString()], { type: 'text/plain' })
     let url = URL.createObjectURL(file)
-    files.value.push({file: file, url: url, text: "Disk "+(i+1).toString(), filename: "Disk "+(i+1).toString()+".dxf"})
+    files.value.push({
+      file: file,
+      url: url,
+      text: 'Disk ' + (i + 1).toString(),
+      filename: 'Disk ' + (i + 1).toString() + '.dxf',
+    })
+  }
+  let ringDrawing = new Drawing()
+  ringDrawing.setUnits('Millimeters')
+
+  drawAllPins(ringDrawing)
+  drawAllPins(fullDrawing)
+
+  let pinFile = new Blob([ringDrawing.toDxfString()], { type: 'text/plain' })
+  let pinUrl = URL.createObjectURL(pinFile)
+  files.value.push({
+    file: pinFile,
+    url: pinUrl,
+    text: 'Outer Pins & Output Pins Only',
+    filename: 'Stationary and moving Pins.dxf',
+  })
+
+  let file = new Blob([fullDrawing.toDxfString()], { type: 'text/plain' })
+  let url = URL.createObjectURL(file)
+  files.value.push({
+    file: file,
+    url: url,
+    text: 'Entire Drive',
+    filename: 'Cycloidal Drive.dxf',
+  })
+}
+
+function drawDiskOntoDXF(drawing, points) {
+  let pointArr = []
+  for (let i = 0; i < points.length; i++) {
+    pointArr.push([points[i].x, points[i].y])
+  }
+  pointArr.push([points[0].x, points[0].y])
+  drawing.drawPolyline(pointArr, true)
+}
+
+function drawHolesOntoDXF(drawing, phaseOffset) {
+  for (let i = 0; i < props.params.numOutputPins; i++) {
+    let x =
+      props.params.eccentricity * Math.cos(phaseOffset) +
+      props.params.outputPinPosition *
+        Math.cos((i * 2 * Math.PI) / props.params.numOutputPins)
+    let y =
+      props.params.eccentricity * Math.sin(phaseOffset) +
+      props.params.outputPinPosition *
+        Math.sin((i * 2 * Math.PI) / props.params.numOutputPins)
+    let r = props.params.eccentricity + props.params.outputPinSize / 2
+    drawing.drawCircle(x, y, r)
+  }
+
+  let x = props.params.eccentricity * Math.cos(phaseOffset)
+  let y = props.params.eccentricity * Math.sin(phaseOffset)
+  let r = props.params.bearingSize / 2
+  drawing.drawCircle(x, y, r)
+}
+
+function drawAllPins(drawing) {
+  drawing.addLayer('outer_ring', Drawing.ACI.WHITE, 'CONTINUOUS')
+  drawing.setActiveLayer('outer_ring')
+  for (let i = 0; i < props.params.numLobes + 1; i++) {
+    let x =
+      (props.params.ringSize / 2) *
+      Math.cos((2 * Math.PI * i) / (props.params.numLobes + 1))
+    let y =
+      (props.params.ringSize / 2) *
+      Math.sin((2 * Math.PI * i) / (props.params.numLobes + 1))
+    let r = props.params.pinSize / 2
+    drawing.drawCircle(x, y, r)
+  }
+
+  drawing.addLayer('output_pins', Drawing.ACI.WHITE, 'CONTINUOUS')
+  drawing.setActiveLayer('output_pins')
+  for (let i = 0; i < props.params.numOutputPins; i++) {
+    let x =
+      props.params.outputPinPosition *
+      Math.cos((i * 2 * Math.PI) / props.params.numOutputPins)
+    let y =
+      props.params.outputPinPosition *
+      Math.sin((i * 2 * Math.PI) / props.params.numOutputPins)
+    let r = props.params.outputPinSize / 2
+    drawing.drawCircle(x, y, r)
   }
 }
 
@@ -73,8 +171,11 @@ function generateDiskPoints(phaseOffset) {
     let rotateAngle = -phaseOffset / props.params.numLobes
     let cos = Math.cos(rotateAngle)
     let sin = Math.sin(rotateAngle)
-    point.x = x * cos - y * sin
-    point.y = x * sin + y * cos
+
+    point.x =
+      x * cos - y * sin + props.params.eccentricity * Math.cos(phaseOffset)
+    point.y =
+      x * sin + y * cos + props.params.eccentricity * Math.sin(phaseOffset)
     points.push(point)
   }
 
@@ -113,9 +214,10 @@ function generateDiskPoints(phaseOffset) {
     <button @click="generateDisks">
       Export Disk{{ props.params.numDisks > 1 ? 's' : '' }}
     </button>
+    <h3 v-if="files.length > 0">Download Links:</h3>
     <ul>
       <li v-for="file in files">
-        <a :href="file.url" :download="file.filename">{{file.text}}</a>
+        <a :href="file.url" :download="file.filename">{{ file.text }}</a>
       </li>
     </ul>
   </div>
